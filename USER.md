@@ -1,17 +1,32 @@
 # USER.md - About Your Human
 
-_Learn about the person you're helping. Update this as you go._
-
-- **Name:**
-- **What to call them:**
-- **Pronouns:** _(optional)_
-- **Timezone:**
-- **Notes:**
+- **Name:** 陈sir
+- **What to call them:** 陈sir
+- **Pronouns:**
+- **Timezone:** Asia/Shanghai (GMT+8)
+- **Notes:** 深圳
 
 ## Context
 
-_(What do they care about? What projects are they working on? What annoys them? What makes them laugh? Build this over time.)_
+### 工作
+- **公司:** 深圳市云屋科技有限公司
+- **职位:** 项目经理
+- **实际职责:** 商务 + 交付，职责边界模糊，事情杂
+- **公司特点:** 小团队/创业公司，分工不细，一人多角色
+- **公司业务:** 远程视频会议软硬件 + 音视频SDK产品
+- **产品形态:** 云端SaaS + 私有化部署，两条线都有
+- **核心技术:** 音视频技术（实时通信/WebRTC等方向）
 
----
+### 公司业务细节
+- **商业模式:** B2B2C，为软件集成商提供音视频SDK，由集成商二次开发后交付最终用户
+- **客户类型:** 开发者/集成商（不是最终使用者）
+- **服务行业:** 应急指挥、在线法院、远程医疗、在线教育、金融等
+- **竞品:** 声网Agora、腾讯TRTC、即构ZEGO
+- **核心优势:** 行业know-how、定制化能力、客户关系、响应速度
+- **核心劣势:** 通用SDK能力不如大厂，品牌影响力弱
+- **获客现状:** 百度广告+信息流（成本高）、销售自行开发（效率低），项目周期长
+- **策略方向:** 先做标准化SDK，再做定制化；行业方案包（半成品）思路
 
-The more you know, the better you can help. But remember — you're learning about a person, not building a dossier. Respect the difference.
+### 性格 & 偏好
+- 务实，对问题有清晰认知
+- 愿意听真实分析，不回避痛点
