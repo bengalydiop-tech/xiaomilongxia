@@ -3,6 +3,9 @@
 .openclaw/identity/
 .openclaw/credentials/
 
+# Email credentials
+.env.email
+
 # OS files
 .DS_Store
 Thumbs.db
