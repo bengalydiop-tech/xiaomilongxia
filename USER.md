@@ -1,7 +1,7 @@
 # USER.md - About Your Human
 
-- **Name:** 陈sir
-- **What to call them:** 陈sir
+- **Name:** 海哥
+- **What to call them:** 海哥
 - **Pronouns:**
 - **Timezone:** Asia/Shanghai (GMT+8)
 - **Notes:** 深圳
