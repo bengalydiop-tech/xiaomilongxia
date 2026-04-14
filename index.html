@@ -29,31 +29,28 @@
   .btn-danger:hover{background:#ff4d4f;color:#fff;border-color:#ff4d4f}
 
   /* ===== MAIN AREA ===== */
-  .main{height:calc(100vh - 48px - 56px);position:relative;background:#fafafa}
+  .main{height:100vh;position:relative;background:#fafafa}
 
-  /* ===== FIVE SPLIT: top 1 big + bottom 4 small, all 16:9, fill screen ===== */
+  /* ===== FIVE SPLIT: top 1 big + bottom 4 small, strict 16:9 ===== */
   .layout-five{
     display:flex;flex-direction:column;height:100%;padding:12px;gap:8px;
+    align-items:center;justify-content:center;
   }
   .layout-five .main-tile{
-    width:100%;flex-shrink:0;
+    width:100%;flex-shrink:0;aspect-ratio:16/9;
   }
   .layout-five .sub-tiles{
     display:grid;gap:8px;grid-template-columns:repeat(4,1fr);
-    flex:1;min-height:0;
+    width:100%;flex-shrink:0;
   }
   .layout-five .sub-tiles .tile{
-    width:100%;height:100%;
+    aspect-ratio:16/9;
   }
   .tile{
     background:#f0f0f0;border:1px solid #e8e8e8;border-radius:6px;
     display:flex;align-items:center;justify-content:center;
     position:relative;overflow:hidden;cursor:pointer;
     transition:border-color .15s;
-    aspect-ratio:16/9;
-  }
-  .layout-five .sub-tiles .tile{
-    aspect-ratio:auto;
   }
   .tile:hover{border-color:#999}
   .tile.active-speaker{border-color:#4096ff}
@@ -84,11 +81,17 @@
     display:flex;align-items:center;gap:4px;z-index:10;
   }
 
-  /* ===== TOOLBAR ===== */
+  /* ===== TOOLBAR — floating, auto-hide ===== */
   .toolbar{
-    height:56px;background:#fff;border-top:1px solid #e8e8e8;
+    position:fixed;bottom:0;left:0;right:0;
+    height:56px;background:rgba(255,255,255,.96);
+    border-top:1px solid #e8e8e8;
     display:flex;align-items:center;justify-content:center;gap:4px;
+    transform:translateY(100%);
+    transition:transform .3s cubic-bezier(.4,0,.2,1);
+    z-index:100;backdrop-filter:blur(8px);
   }
+  .toolbar.show{transform:translateY(0)}
   .tool{
     display:flex;align-items:center;gap:6px;
     background:none;border:1px solid #e8e8e8;border-radius:6px;
@@ -111,7 +114,7 @@
   .overlay.show{display:block}
   .overlay .bg{position:absolute;inset:0}
   .panel{
-    position:absolute;background:#fff;border:1px solid #e8e8e8;
+    position:fixed;background:#fff;border:1px solid #e8e8e8;
     border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,.1);
     min-width:360px;
   }
@@ -647,7 +650,43 @@ setInterval(() => {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeP(); });
 window.addEventListener('resize', () => { if (lay === 'five') render(); });
 
+/* ===== TOOLBAR SHOW/HIDE ON HOVER ===== */
+const toolbar = document.querySelector('.toolbar');
+let toolbarTimer = null;
+
+function showToolbar() {
+  toolbar.classList.add('show');
+  clearTimeout(toolbarTimer);
+}
+function hideToolbar() {
+  toolbarTimer = setTimeout(() => {
+    if (!document.querySelector('.overlay.show')) {
+      toolbar.classList.remove('show');
+    }
+  }, 1500);
+}
+
+// show when mouse near bottom 80px
+document.addEventListener('mousemove', e => {
+  if (window.innerHeight - e.clientY < 80) {
+    showToolbar();
+  } else if (e.clientY < window.innerHeight - 120) {
+    hideToolbar();
+  }
+});
+
+// keep visible when hovering toolbar itself
+toolbar.addEventListener('mouseenter', () => { clearTimeout(toolbarTimer); });
+toolbar.addEventListener('mouseleave', hideToolbar);
+
+// show on panel open
+const origOpenP = openP;
+
 render();
+
+// initial show then auto-hide
+showToolbar();
+hideToolbar();
 </script>
 </body>
 </html>
