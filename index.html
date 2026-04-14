@@ -31,28 +31,29 @@
   /* ===== MAIN AREA ===== */
   .main{height:calc(100vh - 48px - 56px);position:relative;background:#fafafa}
 
-  /* ===== FIVE SPLIT: top 1 big + bottom 4 small, all 16:9 ===== */
+  /* ===== FIVE SPLIT: top 1 big + bottom 4 small, all 16:9, fill screen ===== */
   .layout-five{
-    display:grid;height:100%;padding:12px;gap:8px;
-    grid-template-columns:repeat(4,1fr);grid-template-rows:auto 1fr;
-    align-content:center;
+    display:flex;flex-direction:column;height:100%;padding:12px;gap:8px;
   }
   .layout-five .main-tile{
-    grid-column:1/5;grid-row:1;
-    aspect-ratio:16/9;max-height:55%;
+    width:100%;flex-shrink:0;
   }
   .layout-five .sub-tiles{
-    grid-column:1/5;grid-row:2;
     display:grid;gap:8px;grid-template-columns:repeat(4,1fr);
+    flex:1;min-height:0;
   }
   .layout-five .sub-tiles .tile{
-    aspect-ratio:16/9;
+    width:100%;height:100%;
   }
   .tile{
     background:#f0f0f0;border:1px solid #e8e8e8;border-radius:6px;
     display:flex;align-items:center;justify-content:center;
     position:relative;overflow:hidden;cursor:pointer;
     transition:border-color .15s;
+    aspect-ratio:16/9;
+  }
+  .layout-five .sub-tiles .tile{
+    aspect-ratio:auto;
   }
   .tile:hover{border-color:#999}
   .tile.active-speaker{border-color:#4096ff}
@@ -505,12 +506,12 @@ function render() {
     const w = document.createElement('div');
     w.className = 'layout-five';
 
-    // Main tile (left)
+    // Main tile (top, full width)
     const mainTile = mkTile(P[mainIdx], true);
     mainTile.classList.add('main-tile');
     w.appendChild(mainTile);
 
-    // Sub tiles (right 2x2)
+    // Sub tiles (bottom 4 columns)
     const subWrap = document.createElement('div');
     subWrap.className = 'sub-tiles';
     P.forEach((p, idx) => {
@@ -521,6 +522,40 @@ function render() {
     });
     w.appendChild(subWrap);
     b.appendChild(w);
+
+    // Dynamic sizing: fill screen with 16:9 tiles
+    requestAnimationFrame(() => {
+      const areaH = b.clientHeight - 24; // padding 12*2
+      const areaW = b.clientWidth - 24;
+      const gap = 8;
+
+      // main tile: 16:9 → h = w * 9/16
+      // sub tiles: 4 columns, each 16:9 → h = (areaW - 3*gap) / 4 * 9/16
+      // totalH = mainH + gap + subH
+      const mainH = areaW * 9 / 16;
+      const subW = (areaW - 3 * gap) / 4;
+      const subH = subW * 9 / 16;
+      const totalH = mainH + gap + subH;
+
+      if (totalH <= areaH) {
+        // fits, use exact 16:9
+        mainTile.style.height = mainH + 'px';
+        mainTile.style.aspectRatio = 'auto';
+        subWrap.querySelectorAll('.tile').forEach(t => {
+          t.style.height = subH + 'px';
+          t.style.aspectRatio = 'auto';
+        });
+      } else {
+        // scale down proportionally
+        const scale = areaH / totalH;
+        mainTile.style.height = (mainH * scale) + 'px';
+        mainTile.style.aspectRatio = 'auto';
+        subWrap.querySelectorAll('.tile').forEach(t => {
+          t.style.height = (subH * scale) + 'px';
+          t.style.aspectRatio = 'auto';
+        });
+      }
+    });
   }
 }
 
@@ -610,6 +645,7 @@ setInterval(() => {
 }, 1000);
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeP(); });
+window.addEventListener('resize', () => { if (lay === 'five') render(); });
 
 render();
 </script>
