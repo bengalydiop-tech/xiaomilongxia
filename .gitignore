@@ -1,0 +1,13 @@
+# OpenClaw sensitive files - DO NOT commit
+.openclaw/openclaw.json
+.openclaw/identity/
+.openclaw/credentials/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
